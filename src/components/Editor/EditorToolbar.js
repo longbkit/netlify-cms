@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { status } from 'Constants/publishModes';
 import { Icon, Dropdown, DropdownItem } from 'UI';
 import { stripProtocol } from 'Lib/urlHelper';
+import i18n from '../../i18n';
 
 export default class EditorToolbar extends React.Component {
   static propTypes = {
@@ -52,7 +53,7 @@ export default class EditorToolbar extends React.Component {
   renderSimplePublishControls = () => {
     const { collection, onPersist, onPersistAndNew, isPersisting, hasChanged, isNewEntry } = this.props;
     if (!isNewEntry && !hasChanged) {
-      return <div className="nc-entryEditor-toolbar-statusPublished">Published</div>;
+      return <div className="nc-entryEditor-toolbar-statusPublished">{i18n.t("Published")}</div>;
     }
     return (
       <div>
@@ -61,12 +62,12 @@ export default class EditorToolbar extends React.Component {
           classNameButton="nc-entryEditor-toolbar-publishButton"
           dropdownTopOverlap="40px"
           dropdownWidth="150px"
-          label={isPersisting ? 'Publishing...' : 'Publish'}
+          label={isPersisting ? i18n.t('publishing') : i18n.t('Publish')}
         >
-          <DropdownItem label="Publish now" icon="arrow" iconDirection="right" onClick={onPersist}/>
+          <DropdownItem label={i18n.t("Publish now")} icon="arrow" iconDirection="right" onClick={onPersist}/>
           {
             collection.get('create')
-              ? <DropdownItem label="Publish and create new" icon="add" onClick={onPersistAndNew}/>
+              ? <DropdownItem label={i18n.t("Publish and create new")} icon="add" onClick={onPersistAndNew}/>
               : null
           }
         </Dropdown>
@@ -87,23 +88,23 @@ export default class EditorToolbar extends React.Component {
       isModification,
     } = this.props;
 
-    const deleteLabel = (hasUnpublishedChanges && isModification && 'Delete unpublished changes')
-      || (hasUnpublishedChanges && (isNewEntry || !isModification) && 'Delete unpublished entry')
-      || (!hasUnpublishedChanges && !isModification && 'Delete published entry');
+    const deleteLabel = (hasUnpublishedChanges && isModification && i18n.t('Delete unpublished changes'))
+      || (hasUnpublishedChanges && (isNewEntry || !isModification) && i18n.t('Delete unpublished entry'))
+      || (!hasUnpublishedChanges && !isModification && i18n.t('Delete published entry'));
 
     return [
         <button
           className="nc-entryEditor-toolbar-saveButton"
           onClick={() => hasChanged && onPersist()}
         >
-          {isPersisting ? 'Saving...' : 'Save'}
+          {isPersisting ? i18n.t('saving') : i18n.t('save')}
         </button>,
         isNewEntry || !deleteLabel ? null
             : <button
                 className="nc-entryEditor-toolbar-deleteButton"
                 onClick={hasUnpublishedChanges ? onDeleteUnpublishedChanges : onDelete}
               >
-                {isDeleting ? 'Deleting...' : deleteLabel}
+                {isDeleting ? i18n.t('deleting') : deleteLabel}
               </button>,
     ];
   };
@@ -128,23 +129,23 @@ export default class EditorToolbar extends React.Component {
           classNameButton="nc-entryEditor-toolbar-statusButton"
           dropdownTopOverlap="40px"
           dropdownWidth="120px"
-          label={isUpdatingStatus ? 'Updating...' : 'Set status'}
+          label={isUpdatingStatus ? i18n.t('Updating...') : i18n.t('Set status')}
         >
           <DropdownItem
             className="nc-entryEditor-toolbar-statusMenu-status"
-            label="Draft"
+            label={i18n.t("Draft")}
             onClick={() => onChangeStatus('DRAFT')}
             icon={currentStatus === status.get('DRAFT') && 'check'}
           />
           <DropdownItem
             className="nc-entryEditor-toolbar-statusMenu-status"
-            label="In review"
+            label={i18n.t("In review")}
             onClick={() => onChangeStatus('PENDING_REVIEW')}
             icon={currentStatus === status.get('PENDING_REVIEW') && 'check'}
           />
           <DropdownItem
             className="nc-entryEditor-toolbar-statusMenu-status"
-            label="Ready"
+            label={i18n.t("Ready")}
             onClick={() => onChangeStatus('PENDING_PUBLISH')}
             icon={currentStatus === status.get('PENDING_PUBLISH') && 'check'}
           />
@@ -154,12 +155,12 @@ export default class EditorToolbar extends React.Component {
           classNameButton="nc-entryEditor-toolbar-publishButton"
           dropdownTopOverlap="40px"
           dropdownWidth="150px"
-          label={isPublishing ? 'Publishing...' : 'Publish'}
+          label={isPublishing ? i18n.t('publishing') : i18n.t('Publish')}
         >
-          <DropdownItem label="Publish now" icon="arrow" iconDirection="right" onClick={onPublish}/>
+          <DropdownItem label={i18n.t("Publish now")} icon="arrow" iconDirection="right" onClick={onPublish}/>
           {
             collection.get('create')
-              ? <DropdownItem label="Publish and create new" icon="add" onClick={onPublishAndNew}/>
+              ? <DropdownItem label={i18n.t("Publish and create new")} icon="add" onClick={onPublishAndNew}/>
               : null
           }
         </Dropdown>
@@ -167,7 +168,7 @@ export default class EditorToolbar extends React.Component {
     }
 
     if (!isNewEntry) {
-      return <div className="nc-entryEditor-toolbar-statusPublished">Published</div>;
+      return <div className="nc-entryEditor-toolbar-statusPublished">{i18n.t("Published")}</div>;
     }
   };
 
@@ -198,12 +199,12 @@ export default class EditorToolbar extends React.Component {
           <div className="nc-entryEditor-toolbar-backArrow">←</div>
           <div>
             <div className="nc-entryEditor-toolbar-backCollection">
-              Writing in <strong>{collection.get('label')}</strong> collection
+              {i18n.t('Writing in')} <strong>{collection.get('label')}</strong> {i18n.t('collection')}
             </div>
             {
               hasChanged
-               ? <div className="nc-entryEditor-toolbar-backStatus-hasChanged">Unsaved Changes</div>
-               : <div className="nc-entryEditor-toolbar-backStatus">Changes saved</div>
+               ? <div className="nc-entryEditor-toolbar-backStatus-hasChanged">{i18n.t('Unsaved Changes')}</div>
+               : <div className="nc-entryEditor-toolbar-backStatus">{i18n.t('Changes saved')}</div>
             }
           </div>
         </Link>
@@ -237,7 +238,7 @@ export default class EditorToolbar extends React.Component {
               </button>
             }
           >
-            <DropdownItem label="Log Out" onClick={onLogoutClick}/>
+            <DropdownItem label={i18n.t("logout")} onClick={onLogoutClick}/>
           </Dropdown>
         </div>
       </div>

@@ -94,7 +94,7 @@ export default class Widget extends Component {
     )) {
       const error = {
         type: ValidationErrorTypes.PRESENCE,
-        message: `${ field.get('label', field.get('name')) } is required.`,
+        message: `${ field.get('label', field.get('name')) } ${i18n.t('is required')}.`,
       };
 
       return { error };
@@ -107,7 +107,7 @@ export default class Widget extends Component {
     if (pattern && !RegExp(pattern.first()).test(value)) {
       const error = {
         type: ValidationErrorTypes.PATTERN,
-        message: `${ field.get('label', field.get('name')) } didn't match the pattern: ${ pattern.last() }`,
+        message: `${ field.get('label', field.get('name')) } ${i18n.t('didn\'t match the pattern')}: ${ pattern.last() }`,
       };
 
       return { error };

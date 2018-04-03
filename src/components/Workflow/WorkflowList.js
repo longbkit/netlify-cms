@@ -7,6 +7,7 @@ import c from 'classnames';
 import { status } from 'Constants/publishModes';
 import { DragSource, DropTarget, HTML5DragDrop } from 'UI'
 import WorkflowCard from './WorkflowCard';
+import i18n from '../../i18n';
 
 // This is a namespace so that we can only drop these elements on a DropTarget with the same
 const DNDNamespace = 'cms-workflow';
@@ -21,9 +22,9 @@ const getColumnClassName = columnName => {
 
 const getColumnHeaderText = columnName => {
   switch (columnName) {
-    case 'draft': return 'Drafts';
-    case 'pending_review': return 'In Review';
-    case 'pending_publish': return 'Ready';
+    case 'draft': return i18n.t('Drafts');
+    case 'pending_review': return i18n.t('In Review');
+    case 'pending_publish': return i18n.t('Ready');
   }
 }
 
@@ -43,7 +44,7 @@ class WorkflowList extends React.Component {
   };
 
   requestDelete = (collection, slug, ownStatus) => {
-    if (window.confirm('Are you sure you want to delete this entry?')) {
+    if (window.confirm(i18n.t('sureToDeleteEntry'))) {
       this.props.handleDelete(collection, slug, ownStatus);
     }
   };
@@ -56,7 +57,7 @@ class WorkflowList extends React.Component {
 Please drag the card to the "Ready" column to enable publishing.`
       );
       return;
-    } else if (!window.confirm('Are you sure you want to publish this entry?')) {
+    } else if (!window.confirm(i18n.t('sureToPublishEntry'))) {
       return;
     }
     this.props.handlePublish(collection, slug);

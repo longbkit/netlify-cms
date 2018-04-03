@@ -3,6 +3,7 @@ import { Map, List, fromJS } from "immutable";
 import { trimStart, flow, isBoolean } from "lodash";
 import { authenticateUser } from "Actions/auth";
 import * as publishModes from "Constants/publishModes";
+import i18n from '../i18n';
 
 export const CONFIG_REQUEST = "CONFIG_REQUEST";
 export const CONFIG_SUCCESS = "CONFIG_SUCCESS";
@@ -90,6 +91,20 @@ async function getConfig(file, isPreloaded) {
   return parseConfig(await response.text());
 }
 
+// support multilingual
+function loadTranslations(config) {
+  const lang = config.lang || 'en';
+  if (lang !== 'en') {
+    try {
+      const translations = require(`../i18n/${lang}.json`);
+      i18n.replace(translations);
+    } catch (err) {
+      console.warn(`Could not load ${lang} translation. Probably missing. Leaving with english.`)
+    }
+  }
+  return config;
+}
+
 export function configLoaded(config) {
   return {
     type: CONFIG_SUCCESS,
@@ -136,7 +151,7 @@ export function loadConfig() {
        * Merge any existing configuration so the result can be validated.
        */
       const mergedConfig = mergePreloadedConfig(preloadedConfig, loadedConfig);
-      const config = flow(validateConfig, applyDefaults)(mergedConfig);
+      const config = flow(validateConfig, applyDefaults, loadTranslations)(mergedConfig);
 
       dispatch(configDidLoad(config));
       dispatch(authenticateUser());
